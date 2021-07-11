@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lan="en-US">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE-edge">
+    <meta name="viewport" content="width-device-width, initial-scale=1.0">
+    <title>Code Quiz</title>
+    <link rel="Stylesheet" href="./assets/css/style.css">
+</head>
+
+<body>
+    <header>
+        <!-- "high scores" button on the left and the timer display on the right -->
+        <ul>
+            <li id="high-scores-link">
+                <a href="#high-scores">View High Scores</a>
+            </li>
+            <li id="time-left">Time Left: 0</li>
+        </ul>
+    </header>
+    <main>
+        <!-- 
+            Make separate sections: initial greeting, quiz, tally, high scores. Hide these sections as appropriate.
+            initial-greeting: header visible, title, description, Start Quiz button
+            quiz-questions: header visible, question, answer buttons, feedback (none shown on first question)
+            tally: header visible, All done!, final score, enter initials form, submit button, feedback on last question
+            high-scores: header hidden, list of high scores, Go Back button (what does this go back to? initial-greeting?), Clear High Scores button
+        -->
+        <section class="initial-greeting" id="initial-greeting">
+            <h1 class="ig-title">Coding Quiz Challenge</h1>
+            <p>
+                Try to answer the following code-related questions within the time limit. Keep in mind that
+                incorrect answers will penalize your score/time by ten seconds!
+            </p>
+            <button class="btn" id="start-quiz">Start Quiz</button>
+        </section>
+
+        <section class="quiz-questions" id="quiz-questions">
+            <h1>Quiz Questions</h1>
+        </section>
+
+        <section class="tally" id="tally">
+            <h1>Tally</h1>
+        </section>
+
+        <section class="high-scores" id="high-scores">
+            <h1>High Scores</h1>
+        </section>
+    </main>
+
+    <!--  the mock up shows no footer -->
+</body>
