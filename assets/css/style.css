@@ -1,3 +1,66 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root { /* set global colors */
+    --dark-color: #3d4167;
+    --medium-color: #bd60e7;    
+    --light-color: #e5e8ff;    
+    --shadow-color: rgba(0, 0, 0, 0.5);
+}
+
+/* start header styling */
+header {
+    padding: 10px;
+    position: -webkit-sticky;
+    position: sticky;
+}
+
+/*
+    seems like overkill to have a separate nav section since it's really just one button and a timer
+    display, but it's probably useful for screen readers
+*/
+header nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+}
+
+header nav ul li {
+    display: inline;
+}
+
+header nav a {
+    text-decoration: none;
+    color: var(--medium-color);
+}
+/* end nav styling
+
+/* end header styling */
+
 .quiz-questions, .tally, .high-scores {
     display: none;
+}
+
+h1 {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    margin-bottom: 20px;
+}
+
+.btn {
+    background-color: var(--dark-color);
+    color: var(--light-color);
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+.initial-greeting {
+    text-align: center;
+    margin: 50px;
+}
+
+.initial-greeting p {
+    margin-bottom: 20px;
 }
