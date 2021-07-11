@@ -6,10 +6,15 @@
 
 :root { /* set global colors and fonts */
     --dark-color: #351c75;
-    --medium-color: #bd60e7;    
+    --medium-color: #bd60e7;  
+    --light-medium-color: #d9d3e9;  
     --light-color: #e5e8ff;    
-    --font-family: Verdana, Geneva, Tahoma, sans-serif;
+    --font-family: Arial, Verdana, Tahoma, sans-serif;
     --shadow-color: rgba(0, 0, 0, 0.5);
+}
+
+body {
+    font-family: var(--font-family);
 }
 
 /* start header styling */
@@ -41,24 +46,26 @@ header nav a {
 
 /* end header styling */
 
-.initial-greeting, /*.quiz-questions,*/ .tally, .high-scores {
+/* start out with all the main sections hidden except for the initial-greeting section */
+/*.initial-greeting,*/ .quiz-questions, .tally, .answer-status, .high-scores {
     display: none;
 }
 
 h1 {
-    font-family: var(--font-family);
     margin-bottom: 20px;
 }
 
 main {
-    margin: 50px;
+    margin-top: 4%;
+    margin-left: 20%;
+    margin-right: 20%;
 }
 
 .btn {
     background-color: var(--dark-color);
     color: var(--light-color);
-    padding: 10px 20px;
-    border-radius: 10px;
+    padding: 6px 15px;
+    border-radius: 7px;
 }
 
 .btn:hover {
@@ -73,6 +80,7 @@ main {
 
 .initial-greeting p {
     margin-bottom: 20px;
+    font-size: 14px;
 }
 
 /* end initial greeting styling */
@@ -97,16 +105,59 @@ main {
     margin-bottom: 5px;
  }
 
- .answer-status {
-    border-top: solid 1px grey;
-    color: grey;
-    font-style: oblique;
-    font-family: var(--font-family);
-    margin-top: 20px;
- }
-
  .answer-status h3 {
      font-weight: lighter;
      margin-top: 10px;
  }
  /* end quiz styling */
+
+ /* start tally styling */
+.tally p {
+    font-size: 16px;
+}
+
+ .tally-form {
+     display: flex;
+     margin-top: 10px;
+ }
+
+ .tally-name {
+    padding: 5px 20px;
+    font--size: 18px;
+ }
+
+ .tally-btn {
+    padding: 2px 10px;
+    margin-top: 3px;
+    margin-left: 15px;
+    border-radius: 5px;
+ }
+
+ /* end tally styling */
+
+ /* begin answer status styling */
+ .answer-status {
+    border-top: solid 1px grey;
+    color: grey;
+    font-style: oblique;
+    margin-top: 20px;
+ }
+
+ /* end answer status styling */
+
+ /* begin high scores styling */
+.high-scores {
+    /* with the header hidden, the margin needs to be increased */
+    margin-top: 15%;
+}
+
+ .high-scores-list {
+    list-style: none;
+ }
+
+ .high-scores-list li {
+     background-color: var(--light-medium-color);
+     margin: 5px; /* all margins set to 5px, but... */
+     margin-left: 0; /* override the left margin */
+     padding: 5px;
+ }

@@ -27,6 +27,7 @@
             initial-greeting: header visible, title, description, Start Quiz button
             quiz-questions: header visible, question, answer buttons, feedback (none shown on first question)
             tally: header visible, All done!, final score, enter initials form, submit button, feedback on last question
+            answer-status: this section is visible with both quiz-questions and with tally
             high-scores: header hidden, list of high scores, Go Back button (what does this go back to? initial-greeting?), Clear High Scores button
         -->
         <section class="initial-greeting" id="initial-greeting">
@@ -51,17 +52,47 @@
                     <button class="btn answer-btn" id="answer4">4. Answer 4 is kinda really super long</button>
                 </section>
             </section>
-            <section class="answer-status">
-                <h3>Your answer to the previous question was correct!</h3>
-            </section>
         </section>
 
         <section class="tally" id="tally">
-            <h1>Tally</h1>
+            <!-- this hardcoded stuff is so I can set up styling correctly. -->
+            <h1>All done!</h1>
+            <p class="tally-string">You had 7 seconds left and answered 12 out of 22 questions correctly.</p>
+            
+            <form class="tally-form" id="tally-form">
+                <div class="form-group">
+                    <label for="tally-name">Enter your initials:</label>
+                    <input type="text" name="tally-name" class="tally-name"/>
+                </div>
+                <div class="form-group">
+                    <button class="btn tally-btn" id="save-tally-initials">Submit</button>        
+                </div>
+            </form>
+        </section>
+
+        <!-- The answer-status section should be visible when either the quiz-questions or tally sections are visible -->
+        <section class="answer-status">
+            <h3>Your answer to the previous question was correct!</h3>
         </section>
 
         <section class="high-scores" id="high-scores">
-            <h1>High Scores</h1>
+             <!-- again, this hardcoded stuff is so I can set up styling correctly. -->
+             <h1>High Scores</h1>
+             <ul class="high-scores-list">
+                 <li>
+                     1. ILM - 24
+                 </li>
+                 <li>
+                     2. SJM - 26
+                 </li>
+                 <li>
+                     3. BJJ - 25
+                 </li>
+             </ul>
+             <section class="hs-buttons" id="hs-buttons">
+                <button class="btn" id="main-page">Start Over</button>
+                <button class="btn" id="clear-high-scores">Clear High Scores</button>
+             </section>
         </section>
     </main>
 
