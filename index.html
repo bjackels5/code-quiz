@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-COMPATIBLE" content="IE-edge">
-    <meta name="viewport" content="width-device-width, initial-scale=1.0">
+    <meta name="viewport" content="initial-scale=1.0">
     <title>Code Quiz</title>
     <link rel="Stylesheet" href="./assets/css/style.css">
 </head>
@@ -25,7 +25,7 @@
         <!-- 
             Make separate sections: initial greeting, quiz, tally, high scores. Hide these sections as appropriate.
             initial-greeting: header visible, title, description, Start Quiz button
-            quiz-questions: header visible, question, answer buttons, feedback (none shown on first question)
+            quiz-questions: header visible, question, answer buttons, answer status (none shown on first question)
             tally: header visible, All done!, final score, enter initials form, submit button, feedback on last question
             answer-status: this section is visible with both quiz-questions and with tally
             high-scores: header hidden, list of high scores, Go Back button (what does this go back to? initial-greeting?), Clear High Scores button
@@ -43,8 +43,8 @@
             <!-- this hardcoded stuff is so I can set up styling correctly. Even when that's done, I'll have 
                     the classes and ids set up, which will simplify the actual coding
             -->
-            <h1>You need to answer this question correctly as quickly as possible</h1>
-            <section class="answers-wrapper">
+            <h1 id="quiz-question">You need to answer this question correctly as quickly as possible</h1>
+            <section class="answers-wrapper" id=answers-wrapper>
                 <section class="answers" id="answers">
                     <button class="btn answer-btn" id="answer1">1. Answer 1</button>
                     <button class="btn answer-btn" id="answer2">2. Answer 2</button>
@@ -60,41 +60,42 @@
             <p class="tally-string">You had 7 seconds left and answered 12 out of 22 questions correctly.</p>
             
             <form class="tally-form" id="tally-form">
-                <div class="form-group">
+                <div class="tally-group">
                     <label for="tally-name">Enter your initials:</label>
-                    <input type="text" name="tally-name" class="tally-name"/>
+                    <input type="text" name="tally-name" class="tally-name" id=tally-name/>
                 </div>
-                <div class="form-group">
+                <div class="tally-group">
                     <button class="btn tally-btn" id="save-tally-initials">Submit</button>        
                 </div>
             </form>
         </section>
 
         <!-- The answer-status section should be visible when either the quiz-questions or tally sections are visible -->
-        <section class="answer-status">
-            <h3>Your answer to the previous question was correct!</h3>
+        <!-- It is blank for the first question since it shows the correct/wrong of the previous question -->
+        <section class="answer-status" id="answer-status">
+            <h3></h3>
         </section>
 
         <section class="high-scores" id="high-scores">
              <!-- again, this hardcoded stuff is so I can set up styling correctly. -->
              <h1>High Scores</h1>
-             <ul class="high-scores-list">
-                 <li>
+             <ul class="high-scores-list" id="high-scores-list">
+                 <li class="high-score-item">
                      1. ILM - 24
                  </li>
-                 <li>
+                 <li class="high-score-item">
                      2. SJM - 26
                  </li>
-                 <li>
+                 <li class="high-score-item">
                      3. BJJ - 25
                  </li>
              </ul>
              <section class="hs-buttons" id="hs-buttons">
-                <button class="btn" id="main-page">Start Over</button>
-                <button class="btn" id="clear-high-scores">Clear High Scores</button>
+                <button class="btn" id="main-page-btn">Start Over</button>
+                <button class="btn" id="clear-high-scores-btn">Clear High Scores</button>
              </section>
         </section>
     </main>
-
+    <script src="./assets/js/code-quiz.js"></script>
     <!--  the mock up shows no footer -->
 </body>

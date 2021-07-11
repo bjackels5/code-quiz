@@ -155,7 +155,7 @@ main {
     list-style: none;
  }
 
- .high-scores-list li {
+.high-score-item {
      background-color: var(--light-medium-color);
      margin: 5px; /* all margins set to 5px, but... */
      margin-left: 0; /* override the left margin */
