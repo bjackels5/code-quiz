@@ -34,6 +34,7 @@ const quizQuestionsIndex = 2;
 const tallyIndex = 3;
 const answerStatusIndex = 4;
 const highScoresIndex = 5;
+
 var sectionEls =    [   document.querySelector("header"), /* no # because it's not an ID */
                         document.querySelector("#initial-greeting"),
                         document.querySelector("#quiz-questions"),
@@ -43,12 +44,16 @@ var sectionEls =    [   document.querySelector("header"), /* no # because it's n
                     ]  
 
 var highScores = []; // name, timeLeft, correctQuestions, totalQuestions
-/* adding some data just to test things...
+//adding some data just to test things...
+/*
 var highScores = [  {name: "ILM", timeLeft: "20", correctQuestions: "25", totalQuestions: "30"},
                     {name: "SJM", timeLeft: "21", correctQuestions: "26", totalQuestions: "30"},
                     {name: "BJJ", timeLeft: "22", correctQuestions: "27", totalQuestions: "30"}];
 */
 
+var currentQuestion = 0;
+var correctTally = 0;
+var timeLeft = 100;
 var qAndAs = [
     {   q: "Question one needs an answer:", 
         answers: [
@@ -77,24 +82,25 @@ var qAndAs = [
     }
 ];
 
-var hdrHighScores = document.querySelector("header")
-/*
-var formEl = document.querySelector("#task-form");
-var pageContentEl = document.querySelector("#page-content");
-*/
+var hdrHighScoresEl = document.querySelector("#high-scores-link");
+var startQuizBtnEl = document.querySelector("#start-quiz");
+var quizQuestionEl = document.querySelector("#quiz-question");
+var answerStatusH3El = document.querySelector("#answer-status h3");
 
-var showSections = function(sectionToShow1, sectionToShow2)
+var showSections = function(sectionToShow1, sectionToShow2, sectionToShow3)
 {
     for (var i = 0; i < sectionEls.length; i++)
     {
-        if (i === sectionToShow1 || i === sectionToShow2) // if sectionToShow2 is null, will this work?
-        {
-            sectionEls[i].style.display = "block";
-        }
-        else
-        {
-            sectionEls[i].style.display = "none";
-        }
+        sectionEls[i].style.display = "none";
+    }
+    sectionEls[sectionToShow1].style.display = "block";
+    if (sectionToShow2)
+    {
+        sectionEls[sectionToShow2].style.display = "block";
+    }
+    if (sectionToShow3)
+    {
+        sectionEls[sectionToShow3].style.display = "block";
     }
 }
 
@@ -136,7 +142,74 @@ var loadHighScores = function()
     }
 }
 
-var showHighScores = function(event) // the high scores button in the upper left was clicked
+var showNextQuestion = function()
+{
+    if (currentQuestion < qAndAs.length)
+    {
+        var currQandA = qAndAs[currentQuestion];
+        quizQuestionEl.innerHTML = currQandA.q;
+        // set the buttons
+        for (var j = 0; j < currQandA.answers.length; j++)
+        {
+            // Sample: document.querySelector("#answer1").innerHTML = currQandA.answers[0].answer;
+            document.querySelector("#answer" + (j+1)).innerHTML = (j+1) + ". " + currQandA.answers[j].answer;
+        }
+
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+var answered = function(event)
+{
+    var theAnswer = event.currentTarget.id[6];
+    
+    if (qAndAs[currentQuestion].answers[theAnswer-1].correct)
+    {
+        // answered correctly
+        answerStatusH3El.innerHTML = "Your previous answer was CORRECT!";
+        correctTally++;
+    }
+    else
+    {
+        // answered incorrectly
+        // TODO!!! decrease the time remaining
+        answerStatusH3El.innerHTML = "Your previous answer was WRONG!";
+    }
+    currentQuestion++;
+    if (!showNextQuestion())
+    {
+        // no more questions to show - go to the final tally
+        // You had 7 seconds left and answered 12 out of 22 questions correctly.
+        document.querySelector("#tally-string").innerHTML = "You had "
+                                                            + timeLeft
+                                                            + " seconds left and answered "
+                                                            + correctTally
+                                                            + " out of "
+                                                            + qAndAs.length
+                                                            + " questions correctly";
+
+        showSections(tallyIndex, answerStatusIndex, headerIndex);
+    }
+}
+
+
+var startQuiz = function(event) // the Start Quiz button was clicked
+{
+    showSections(quizQuestionsIndex, headerIndex, answerStatusIndex);
+
+    currentQuestion = 0; // first question in the quiz
+    correctTally = 0;
+    // set answer-status h3 text to blank
+    answerStatusH3El.innerHTML = "";
+
+    showNextQuestion();
+}
+
+var showHighScores = function(event) // the high scores link in the upper left was clicked
 {
     // hide all sections - including the header - except for the high scores section
     showSections(highScoresIndex);
@@ -150,7 +223,13 @@ var saveHighScores = function()
 
 
 // Event Listeners
-hdrHighScores.addEventListener("click", showHighScores);
+hdrHighScoresEl.addEventListener("click", showHighScores);
+startQuizBtnEl.addEventListener("click", startQuiz);
+document.querySelector("#answer1").addEventListener("click", answered);
+document.querySelector("#answer2").addEventListener("click", answered);
+document.querySelector("#answer3").addEventListener("click", answered);
+document.querySelector("#answer4").addEventListener("click", answered);
+
 /*
 formEl.addEventListener("submit", taskFormHandler);
 pageContentEl.addEventListener("click", taskButtonHandler);
