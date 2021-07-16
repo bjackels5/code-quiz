@@ -55,7 +55,7 @@ var qAndAs = [ /* correctAnswer is 1 based, not 0 based */
     },
     {   q: "Where is the correct place to insert a JavaScript?",
         answers: [ "The <head> and <body> sections", "The <head> section", "The <body> section", "The <javascript> section"],
-        correctAnswer: 1
+        correctAnswer: 3
     },
     {   q: "What is the correct syntax for referring to an external script called 'xxx.js'?",
         answers: [ '<script name="xxx.js">', '<script src="xxx.js">', '<script href="xxx.js">', '<script source="xxx.js>"'],
@@ -182,7 +182,7 @@ var answered = function(event)
     else
     {
         // answered incorrectly
-        timeLeft -= wrongAnswerPenalty;
+        timeLeft = Math.max(0, timeLeft - wrongAnswerPenalty);
         renderTimeLeft();
         answerStatusH3El.textContent = "Your previous answer was WRONG!";
     }
