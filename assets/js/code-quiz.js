@@ -52,7 +52,7 @@ var highScores = [  {name: "ILM", timeLeft: "20", correctQuestions: "25", totalQ
                     {name: "BJJ", timeLeft: "22", correctQuestions: "27", totalQuestions: "30"}];
 */
 
-const initTimeLeft = 60;
+const initTimeLeft = 30;
 const wrongAnswerPenalty = 10;
 
 var currentQuestion = 0;
@@ -115,10 +115,18 @@ var showSections = function(sectionToShow1, sectionToShow2, sectionToShow3)
     }
 }
 
-var renderHighScores = function()
+var renderHighScores = function(showTimedOutMsg)
 {
     // hide all sections - including the header - except for the high scores section
     showSections(highScoresIndex);
+    if (showTimedOutMsg)
+    {
+        document.querySelector("#timed-out").style.display = "block";
+    }
+    else
+    {
+        document.querySelector("#timed-out").style.display = "none";
+    }
 
     // Clear out the #high-scores-list if it's not empty
     var highScoresDisplay = document.querySelector("#high-scores-list");
@@ -254,14 +262,14 @@ var tallyFormHandler = function(event)
     var tHighScores = highScores.sort(compareTally); // this does not work as desired. Come back to this later
     highScores = tHighScores;
     saveHighScores();
-    renderHighScores();
+    renderHighScores(false);
 }    
 
 
 var showHighScores = function(event) // the high scores link in the upper left was clicked
 {
     loadHighScores();
-    renderHighScores();
+    renderHighScores(false);
 }
 
 var saveHighScores = function()
@@ -273,7 +281,7 @@ var clearHighScores = function()
 {
     highScores = [];
     saveHighScores();
-    renderHighScores();
+    renderHighScores(false);
 }
 
 var startOver = function()
@@ -298,11 +306,10 @@ function countdown()
         }
         else
         {
-            //stop the quiz - need more than just this alert, but let's make sure the logic to get here is
-            // working before proceeding
+            // tht eimer ran out - stop the quiz
             clearInterval(timeInterval);
-            window.alert("You've run out of time!");
-            // Use `clearInterval()` to stop the timer
+            renderHighScores(true);
+            //window.alert("You've run out of time!");
         }
     }, 1000);
 }
