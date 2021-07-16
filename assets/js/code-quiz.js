@@ -28,6 +28,7 @@
 // answer-status
 // high-scores
 
+// section element indexes
 const headerIndex = 0;
 const initialGreetingIndex = 1;
 const quizQuestionsIndex = 2;
@@ -52,10 +53,12 @@ var highScores = [  {name: "ILM", timeLeft: "20", correctQuestions: "25", totalQ
 */
 
 const initTimeLeft = 60;
+const wrongAnswerPenalty = 10;
 
 var currentQuestion = 0;
 var correctTally = 0;
 var timeLeft = initTimeLeft;
+var timeInterval;
 var qAndAs = [
     {   q: "Question one needs an answer:", 
         answers: [
@@ -76,7 +79,7 @@ var qAndAs = [
     {   q: "Question three needs an answer:",
         answers: [
             { answer: "answer #3.1 t", correct: true },
-            { answer: "answer #3.2 f", correct: true },
+            { answer: "answer #3.2 f", correct: false },
             { answer: "answer #3.3 f", correct: false },
             { answer: "answer #3.4 f", correct: false }
 
@@ -90,6 +93,11 @@ var quizQuestionEl = document.querySelector("#quiz-question");
 var answerStatusH3El = document.querySelector("#answer-status h3");
 var tallyFormEl = document.querySelector("#tally-form");
 
+var renderTimeLeft = function()
+{
+    document.querySelector("#time-left").textContent = "Time: " + timeLeft;
+}
+
 var showSections = function(sectionToShow1, sectionToShow2, sectionToShow3)
 {
     for (var i = 0; i < sectionEls.length; i++)
@@ -97,11 +105,11 @@ var showSections = function(sectionToShow1, sectionToShow2, sectionToShow3)
         sectionEls[i].style.display = "none";
     }
     sectionEls[sectionToShow1].style.display = "block";
-    if (sectionToShow2)
+    if (sectionToShow2 != null)
     {
         sectionEls[sectionToShow2].style.display = "block";
     }
-    if (sectionToShow3)
+    if (sectionToShow3 != null)
     {
         sectionEls[sectionToShow3].style.display = "block";
     }
@@ -139,14 +147,6 @@ var loadHighScores = function()
     // Clear out the high scores array
     highScores = [];
 
-    /*
-    // Clear out the #high-scores-list if it's not empty
-    var highScoresDisplay = document.querySelector("#high-scores-list");
-    while (highScoresDisplay.firstChild)
-    {
-        highScoresDisplay.removeChild(highScoresDisplay.firstChild);
-    }
-*/
     // Get the list of high scores from localStorage into an array
     highScores = localStorage.getItem("high-scores");
     if (highScores === null)
@@ -156,21 +156,6 @@ var loadHighScores = function()
     else
     {
         highScores = JSON.parse(highScores);
-        // add each item of that array to #high-scores-list
-        // This function assumes that the saved high scores are in the correct order
-        /*
-        for (var i = 0; i < highScores.length; i++)
-        {
-            var highScore = highScores[i];
-            // create the list item and format it
-            var listItemEl = document.createElement("li");
-            listItemEl.className = "high-score-item";
-            var num=i+1;
-            var theString =  num + ". " + highScore.name + " - " + highScore.timeLeft;
-            listItemEl.textContent = theString;
-
-            highScoresDisplay.appendChild(listItemEl);
-        }*/
     }
 }
 
@@ -179,12 +164,12 @@ var showNextQuestion = function()
     if (currentQuestion < qAndAs.length)
     {
         var currQandA = qAndAs[currentQuestion];
-        quizQuestionEl.innerHTML = currQandA.q;
+        quizQuestionEl.textContent = currQandA.q;
         // set the buttons
         for (var j = 0; j < currQandA.answers.length; j++)
         {
-            // Sample: document.querySelector("#answer1").innerHTML = currQandA.answers[0].answer;
-            document.querySelector("#answer" + (j+1)).innerHTML = (j+1) + ". " + currQandA.answers[j].answer;
+            // Sample: document.querySelector("#answer1").textContent = currQandA.answers[0].answer;
+            document.querySelector("#answer" + (j+1)).textContent = (j+1) + ". " + currQandA.answers[j].answer;
         }
 
         return true;
@@ -198,36 +183,36 @@ var showNextQuestion = function()
 var answered = function(event)
 {
     var theAnswer = event.currentTarget.id[6];
-    
+
     if (qAndAs[currentQuestion].answers[theAnswer-1].correct)
     {
         // answered correctly
-        answerStatusH3El.innerHTML = "Your previous answer was CORRECT!";
+        answerStatusH3El.textContent = "Your previous answer was CORRECT!";
         correctTally++;
     }
     else
     {
         // answered incorrectly
-        // TODO!!! decrease the time remaining
-        answerStatusH3El.innerHTML = "Your previous answer was WRONG!";
+        timeLeft -= wrongAnswerPenalty;
+        renderTimeLeft();
+        answerStatusH3El.textContent = "Your previous answer was WRONG!";
     }
     currentQuestion++;
     if (!showNextQuestion())
     {
         // no more questions to show - go to the final tally
         // You had 7 seconds left and answered 12 out of 22 questions correctly.
-        document.querySelector("#tally-string").innerHTML = "You had "
+        clearInterval(timeInterval);
+        document.querySelector("#tally-string").textContent = "You had "
                                                             + timeLeft
                                                             + " seconds left and answered "
                                                             + correctTally
                                                             + " out of "
                                                             + qAndAs.length
                                                             + " questions correctly";
-
         showSections(tallyIndex, answerStatusIndex, headerIndex);
     }
 }
-
 
 var startQuiz = function(event) // the Start Quiz button was clicked
 {
@@ -236,10 +221,12 @@ var startQuiz = function(event) // the Start Quiz button was clicked
     currentQuestion = 0; // first question in the quiz
     correctTally = 0;
     timeLeft = initTimeLeft;
+    renderTimeLeft();
     // set answer-status h3 text to blank
-    answerStatusH3El.innerHTML = "";
+    answerStatusH3El.textContent = "";
 
     showNextQuestion();
+    countdown();
 }
 
 var saveHighScores = function()
@@ -258,10 +245,7 @@ var tallyFormHandler = function(event)
 {
     event.preventDefault();
 
-    debugger;
-
     // get the user input
-//    var initials = document.querySelector("#tally-name").value;
     var initials = document.querySelector("input[name='tally-name']").value
 
     // add the high score to the array
@@ -294,14 +278,42 @@ var clearHighScores = function()
 
 var startOver = function()
 {
+    timeLeft = initTimeLeft;
+    renderTimeLeft();
+
+    document.querySelector("#initial-greeting-msg").textContent = "Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your score/time by " + wrongAnswerPenalty + " seconds!";
     showSections(headerIndex, initialGreetingIndex);
 }
+
+function countdown()
+{
+    // Use the `setInterval()` method to call a function to be executed every 1000 milliseconds (1 second)
+    timeInterval = setInterval(function()
+    {
+        // As long as the `timeLeft` is greater than 1
+        if (timeLeft > 0)
+        {
+            renderTimeLeft();
+            timeLeft--;
+        }
+        else
+        {
+            //stop the quiz - need more than just this alert, but let's make sure the logic to get here is
+            // working before proceeding
+            clearInterval(timeInterval);
+            window.alert("You've run out of time!");
+            // Use `clearInterval()` to stop the timer
+        }
+    }, 1000);
+}
+  
 
 
 // Event Listeners
 hdrHighScoresEl.addEventListener("click", showHighScores);
 startQuizBtnEl.addEventListener("click", startQuiz);
 tallyFormEl.addEventListener("submit", tallyFormHandler);
+
 document.querySelector("#answer1").addEventListener("click", answered);
 document.querySelector("#answer2").addEventListener("click", answered);
 document.querySelector("#answer3").addEventListener("click", answered);
@@ -309,90 +321,4 @@ document.querySelector("#answer4").addEventListener("click", answered);
 document.querySelector("#main-page-btn").addEventListener("click", startOver);
 document.querySelector("#clear-high-scores-btn").addEventListener("click", clearHighScores);
 
-/*
-formEl.addEventListener("submit", taskFormHandler);
-pageContentEl.addEventListener("click", taskButtonHandler);
-pageContentEl.addEventListener("change", taskStatusChangeHandler);
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* TIMER STUFF
-var timerEl = document.getElementById('countdown');
-var mainEl = document.getElementById('main');
-var startBtn = document.getElementById('start');
-
-var message =
-  'Congratulations! Now you are prepared to tackle the Challenge this week! Good luck!';
-var words = message.split(' ');
-
-// Timer that counts down from 5
-function countdown() {
-  var timeLeft = 5;
-
-  // Use the `setInterval()` method to call a function to be executed every 1000 milliseconds
-  var timeInterval = setInterval(function() {
-    // As long as the `timeLeft` is greater than 1
-    if (timeLeft > 1) {
-      // Set the `textContent` of `timerEl` to show the remaining seconds
-      timerEl.textContent = timeLeft + ' seconds remaining';
-      // Decrement `timeLeft` by 1
-      timeLeft--;
-    } else if (timeLeft === 1) {
-      // When `timeLeft` is equal to 1, rename to 'second' instead of 'seconds'
-      timerEl.textContent = timeLeft + ' second remaining';
-      timeLeft--;
-    } else {
-      // Once `timeLeft` gets to 0, set `timerEl` to an empty string
-      timerEl.textContent = '';
-      // Use `clearInterval()` to stop the timer
-      clearInterval(timeInterval);
-      // Call the `displayMessage()` function
-      displayMessage();
-    }
-  }, 1000);
-}
-
-// Displays the message one word at a time
-function displayMessage() {
-  var wordCount = 0;
-
-  // Uses the `setInterval()` method to call a function to be executed every 300 milliseconds
-  var msgInterval = setInterval(function() {
-    if (words[wordCount] === undefined) {
-      clearInterval(msgInterval);
-    } else {
-      mainEl.textContent = words[wordCount];
-      wordCount++;
-    }
-  }, 300);
-}
-
-startBtn.onclick = countdown;
-*/
-
-
-
-
-
-
-
-// Objects and variables needed:
-//      answer: contains the text answer and whether or not the answer is correct
-//
-//      question: contains the question and an array for the answers
-//
-//      an array of questions
-//
-//      a variable to contain the number of correct questions 
+startOver();
