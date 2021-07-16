@@ -1,39 +1,63 @@
-# code-quiz
+# Code Quiz
+This fourth challenge for the Coding Bootcamp is to use javascript present a timed quiz about javascript (how very meta!). This challenge was started from scratch.
 
-Module 4 goals:
-Explain and identify the document object and its relationship to HTML
+[Requirements](#requirements)
 
-Use the window object for local and session storage
+[What I Learned](#whatILearned)
 
-Use DOM API methods to select and dynamically generate HTML elements and content
+[Code Quiz Screenshot](#webImage)
 
-Use DOM API methods to handle events such as key presses and mouse clicks
+[Code Quiz URL](#projectURL)
 
-Set time-based events using time functions
+[Contact Me](#contactMe)
 
-Write event-driven functions
+---
+<a id="requirements"></a>
+## Requirements
+<ul>
+<li> When the user clicks the start button, a timer starts and the user is presented with a question</li>
+<li> When the user selects an answer to the question</li>
+<ul>
+<li> They are presented with another question</li>
+<li> They are told if they answered the previous question correctly or not</li>
+<li> If they answered incorrectly, time is deducted from the timer</li>
+</ul>
+<li> When all questions are answered or the timer reaches 0, the game is over</li>
+<li> When the game is over, the user can save their initials and score</li>
+<ul><li> NOTE: I changed this so that if the game is over because the time ran out, the user's score is not saved.</li></ul>
+<li> NOTE About Answer Feedback: The mockup shows the feedback as "Wrong!" or "Correct!" below the answers. It looks like the feedback applies to the user's response to the question currently displayed, but it's actually to the previous question. I changed the wording to be "Your previous answer was Correct/Wrong!" (as appropriate).</li>
+<li> NOTE About the "Go Back" button: The "Go Back" button on the high scores screen in the mock up is ambiguous - does it "go back" to the last question? Or does it go back to the start of the quiz? Or does it go back to the initial greeting? I've made it go back to the initial greeting, and I've changed the name to "Start Over".</li>
+<li> NOTE About the quiz questions: I used the questions from the mockup and then added a few more from
 
-Research Web API documentation to implement new and unfamiliar interfaces
+[W3 Schools Quiz](https://www.w3schools.com/js/js_quiz.asp)</li>
+</ul>
 
+---
+<a id="whatILearned"></a>
+## I learned...
+* how to use timers
+* how to use localStorage for data persistence on a given device
+* how to use javascript to select and dynamically generate HTML elements and content
+* how to handle events such as key presses and mouse 
+clicks, including using event-driven functions
+* how to research Web API docmentation
 
+---
 
-// the mock-up shows some behavior with which I disagree. 
-// 
-// ANSWER STATUS
-// After the user makes a selection, the screen change to the next question and the "correct"
-// or "wrong" shows up on that next screen. It looks like they're getting feedback on the question that's currently
-// shown, but in reality they haven't even made a selection yet.
-//
-// At a minimum, I'm going to change the wording to "your previous answer was correct/wrong"
-// More appropriate would be to disable responses to the current question, add the Feedback on the same screen as the
-// question and add a "Next" button. But that would likely mess with the timed aspect.
-//
-// Another possibility would be to add the "correct/wrong" below the current question, disable the current question buttons
-// (or just hide them?), add the new question/answers and scroll down to them. That wouldn't change the timer aspect,
-// although if I do this I need make sure to make the header sticky so that the timer is always visible.
-//
-// GO BACK button
-// The "Go Back" button on the high scores screen in the mock up is ambiguous - does it "go back" to the last question?
-// Or does it go back to the start of the quiz? Or does it go back to the initial greeting? I'm going to make it go back
-// to the initial greeting, and I'm going to change the name of the button to something that reflects that.
-//
+## Code Quiz Screenshot
+
+<a id="webImage"></a>
+
+![Code Quiz](./assets/images/codeQuizScreenshot.png)
+
+---
+
+## Code Quiz URL
+<a id="projectURL"></a>
+[Code Quiz URL](https://bjackels5.github.io/code-quiz/)
+
+---
+
+<a id="contactMe"></a>
+## Contact Me
+You can reach me, Brenda Jackels, at bjackels5@gmail.com.
