@@ -1,32 +1,4 @@
-// Just so I don't have to flip between this file and index.html so much...
-//
-// IDs of things to "listen" to
-// high-scores-link
-// start-quiz
-// answer1, answer2, answer3, answer4 - is there a way to do this dynamically in case I want more/fewer possible answers?
-// save-tally-initials
-// listen for hitting enter in the initials box (tally-group, maybe, and this would cover save-tally-initials, too)
-// main-page-btn
-// clear-high-scores-btn
-// 
-// OTHER IDs I might need7
-// tally-string: You had 7 seconds left and answered 12 out of 22 questions correctly.
-// quiz-question
-// answers-wrapper
-// answers
-// tally-group (class, not ID. If I need it, add it as an ID, too)
-// tally-name
-// tally-btn (class, not ID. If I need it, add it as an ID, too)
-// high-scores-list
-// high-score-item
-//
-// SECTION IDs
-// header (not an ID - but needs to be hidden when showing the high scores)
-// initial-greeting
-// quiz-questions
-// tally
-// answer-status
-// high-scores
+// code-quiz.js - module 4 project
 
 // section element indexes
 const headerIndex = 0;
