@@ -26,31 +26,18 @@ var currentQuestion = 0;
 var correctTally = 0;
 var timeLeft = initTimeLeft;
 var timeInterval;
-var qAndAs = [
-    {   q: "Question one needs an answer:", 
-        answers: [
-            { answer: "answer #1.1 f", correct: false },
-            { answer: "answer #1.2 f", correct: false },
-            { answer: "answer #1.3 t", correct: true },
-            { answer: "answer #1.4 f", correct: false }
-        ]
+var qAndAs = [ /* correctAnswer is 1 based, not 0 based */
+    {   q: "Commonly used data types do NOT include:", 
+        answers: [ "strings", "booleans", "alerts", "numbers" ],
+        correctAnswer: 3
     },
-    {   q: "Question two needs an answer:",
-        answers: [
-            { answer: "answer #2.1 f", correct: false },
-            { answer: "answer #2.2 t", correct: true },
-            { answer: "answer #2.3 f", correct: false },
-            { answer: "answer #2.4 f", correct: false }
-        ]
+    {   q: "The condition in an if/else statement is enclosed with:",
+        answers: [ "quotes", "curly brackets", "parenthesis", "square brackets" ],
+        correctAnswer: 3
     },
     {   q: "Question three needs an answer:",
-        answers: [
-            { answer: "answer #3.1 t", correct: true },
-            { answer: "answer #3.2 f", correct: false },
-            { answer: "answer #3.3 f", correct: false },
-            { answer: "answer #3.4 f", correct: false }
-
-        ]
+        answers: [ "answer #3.1 t", "answer #3.2 f", "answer #3.3 f", "answer #3.4 f"],
+        correctAnswer: 1
     }
 ];
 
@@ -136,12 +123,12 @@ var showNextQuestion = function()
     {
         var currQandA = qAndAs[currentQuestion];
         document.querySelector("#quiz-question").textContent = currQandA.q;
-        // quizQuestionEl.textContent = currQandA.q;
         // set the buttons
         for (var j = 0; j < currQandA.answers.length; j++)
         {
             // Sample: document.querySelector("#answer1").textContent = currQandA.answers[0].answer;
-            document.querySelector("#answer" + (j+1)).textContent = (j+1) + ". " + currQandA.answers[j].answer;
+//            document.querySelector("#answer" + (j+1)).textContent = (j+1) + ". " + currQandA.answers[j].answer;
+            document.querySelector("#answer" + (j+1)).textContent = (j+1) + ". " + currQandA.answers[j];
         }
 
         return true;
@@ -156,7 +143,7 @@ var answered = function(event)
 {
     var theAnswer = event.currentTarget.id[6];
 
-    if (qAndAs[currentQuestion].answers[theAnswer-1].correct)
+    if (qAndAs[currentQuestion].correctAnswer ===  parseInt(theAnswer))
     {
         // answered correctly
         answerStatusH3El.textContent = "Your previous answer was CORRECT!";
