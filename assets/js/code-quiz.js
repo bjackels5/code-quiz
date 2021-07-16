@@ -43,7 +43,7 @@ var sectionEls =    [   document.querySelector("header"), /* no # because it's n
                         document.querySelector("#high-scores")
                     ]  
 
-var highScores = []; // name, timeLeft, correctQuestions, totalQuestions
+var highScores = []; // name, timeLeft, correctQuestions, aQuestions
 //adding some data just to test things...
 /*
 var highScores = [  {name: "ILM", timeLeft: "20", correctQuestions: "25", totalQuestions: "30"},
@@ -51,9 +51,11 @@ var highScores = [  {name: "ILM", timeLeft: "20", correctQuestions: "25", totalQ
                     {name: "BJJ", timeLeft: "22", correctQuestions: "27", totalQuestions: "30"}];
 */
 
+const initTimeLeft = 60;
+
 var currentQuestion = 0;
 var correctTally = 0;
-var timeLeft = 100;
+var timeLeft = initTimeLeft;
 var qAndAs = [
     {   q: "Question one needs an answer:", 
         answers: [
@@ -86,6 +88,7 @@ var hdrHighScoresEl = document.querySelector("#high-scores-link");
 var startQuizBtnEl = document.querySelector("#start-quiz");
 var quizQuestionEl = document.querySelector("#quiz-question");
 var answerStatusH3El = document.querySelector("#answer-status h3");
+var tallyFormEl = document.querySelector("#tally-form");
 
 var showSections = function(sectionToShow1, sectionToShow2, sectionToShow3)
 {
@@ -104,10 +107,10 @@ var showSections = function(sectionToShow1, sectionToShow2, sectionToShow3)
     }
 }
 
-var loadHighScores = function()
+var renderHighScores = function()
 {
-    // Clear out the high scores array
-    highScores = [];
+    // hide all sections - including the header - except for the high scores section
+    showSections(highScoresIndex);
 
     // Clear out the #high-scores-list if it's not empty
     var highScoresDisplay = document.querySelector("#high-scores-list");
@@ -116,6 +119,34 @@ var loadHighScores = function()
         highScoresDisplay.removeChild(highScoresDisplay.firstChild);
     }
 
+    // add each high score to #high-scores-list
+    for (var i = 0; i < highScores.length; i++)
+    {
+        var highScore = highScores[i];
+        // create the list item and format it
+        var listItemEl = document.createElement("li");
+        listItemEl.className = "high-score-item";
+        var theString =  (i+1) + ". " + highScore.name + " - " + highScore.timeLeft;
+        listItemEl.textContent = theString;
+
+        highScoresDisplay.appendChild(listItemEl);
+    }
+}
+
+
+var loadHighScores = function()
+{
+    // Clear out the high scores array
+    highScores = [];
+
+    /*
+    // Clear out the #high-scores-list if it's not empty
+    var highScoresDisplay = document.querySelector("#high-scores-list");
+    while (highScoresDisplay.firstChild)
+    {
+        highScoresDisplay.removeChild(highScoresDisplay.firstChild);
+    }
+*/
     // Get the list of high scores from localStorage into an array
     highScores = localStorage.getItem("high-scores");
     if (highScores === null)
@@ -127,6 +158,7 @@ var loadHighScores = function()
         highScores = JSON.parse(highScores);
         // add each item of that array to #high-scores-list
         // This function assumes that the saved high scores are in the correct order
+        /*
         for (var i = 0; i < highScores.length; i++)
         {
             var highScore = highScores[i];
@@ -138,7 +170,7 @@ var loadHighScores = function()
             listItemEl.textContent = theString;
 
             highScoresDisplay.appendChild(listItemEl);
-        }
+        }*/
     }
 }
 
@@ -203,17 +235,11 @@ var startQuiz = function(event) // the Start Quiz button was clicked
 
     currentQuestion = 0; // first question in the quiz
     correctTally = 0;
+    timeLeft = initTimeLeft;
     // set answer-status h3 text to blank
     answerStatusH3El.innerHTML = "";
 
     showNextQuestion();
-}
-
-var showHighScores = function(event) // the high scores link in the upper left was clicked
-{
-    // hide all sections - including the header - except for the high scores section
-    showSections(highScoresIndex);
-    loadHighScores();
 }
 
 var saveHighScores = function()
@@ -222,13 +248,66 @@ var saveHighScores = function()
 }
 
 
+var compareTally = function(a, b)
+{
+    // timeLeft - reverse order
+    return a.timeLeft.toInt < b.timeLeft.toInt;
+}
+
+var tallyFormHandler = function(event)
+{
+    event.preventDefault();
+
+    debugger;
+
+    // get the user input
+//    var initials = document.querySelector("#tally-name").value;
+    var initials = document.querySelector("input[name='tally-name']").value
+
+    // add the high score to the array
+    var highScore = { name: initials, timeLeft: timeLeft, correctQuestions: correctTally, totalQuestions: qAndAs.length } ;
+    highScores.push(highScore);
+    var tHighScores = highScores.sort(compareTally); // this does not work as desired. Come back to this later
+    highScores = tHighScores;
+    saveHighScores();
+    renderHighScores();
+}    
+
+
+var showHighScores = function(event) // the high scores link in the upper left was clicked
+{
+    loadHighScores();
+    renderHighScores();
+}
+
+var saveHighScores = function()
+{
+    localStorage.setItem("high-scores", JSON.stringify(highScores));
+}
+
+var clearHighScores = function()
+{
+    highScores = [];
+    saveHighScores();
+    renderHighScores();
+}
+
+var startOver = function()
+{
+    showSections(headerIndex, initialGreetingIndex);
+}
+
+
 // Event Listeners
 hdrHighScoresEl.addEventListener("click", showHighScores);
 startQuizBtnEl.addEventListener("click", startQuiz);
+tallyFormEl.addEventListener("submit", tallyFormHandler);
 document.querySelector("#answer1").addEventListener("click", answered);
 document.querySelector("#answer2").addEventListener("click", answered);
 document.querySelector("#answer3").addEventListener("click", answered);
 document.querySelector("#answer4").addEventListener("click", answered);
+document.querySelector("#main-page-btn").addEventListener("click", startOver);
+document.querySelector("#clear-high-scores-btn").addEventListener("click", clearHighScores);
 
 /*
 formEl.addEventListener("submit", taskFormHandler);
