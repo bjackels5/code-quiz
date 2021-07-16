@@ -27,6 +27,7 @@ var correctTally = 0;
 var timeLeft = initTimeLeft;
 var timeInterval;
 var qAndAs = [ /* correctAnswer is 1 based, not 0 based */
+    /* these questions are from the mockup */
     {   q: "Commonly used data types do NOT include:", 
         answers: [ "strings", "booleans", "alerts", "numbers" ],
         correctAnswer: 3
@@ -35,9 +36,38 @@ var qAndAs = [ /* correctAnswer is 1 based, not 0 based */
         answers: [ "quotes", "curly brackets", "parenthesis", "square brackets" ],
         correctAnswer: 3
     },
-    {   q: "Question three needs an answer:",
-        answers: [ "answer #3.1 t", "answer #3.2 f", "answer #3.3 f", "answer #3.4 f"],
+    {   q: "Arrays in javascript can be used to store:",
+        answers: [ "numbers and strings", "other arrays", "booleans", "all of the above"],
+        correctAnswer: 4
+    },
+    {   q: "String variables must be enclosed within _______________ when being assigned to variables.",
+        answers: [ "commas", "quotes", "curly brackets", "parenthesis"],
+        correctAnswer: 2
+    },
+    {   q: "A very useful tool used during development and debugging for printing content to the debugger is:",
+        answers: [ "console.log", "JavaScript", "for loops", "terminal/bash"],
         correctAnswer: 1
+    },
+    // These questions are from https://www.w3schools.com/quiztest/quiztest.asp?qtest=JS
+    {   q: "Inside which HTML element do we put the JavaScript?",
+        answers: ["<js>", "<scripting>", "<script>", "<javascript>"],
+        correctAnswer: 3
+    },
+    {   q: "Where is the correct place to insert a JavaScript?",
+        answers: [ "The <head> and <body> sections", "The <head> section", "The <body> section", "The <javascript> section"],
+        correctAnswer: 1
+    },
+    {   q: "What is the correct syntax for referring to an external script called 'xxx.js'?",
+        answers: [ '<script name="xxx.js">', '<script src="xxx.js">', '<script href="xxx.js">', '<script source="xxx.js>"'],
+        correctAnswer: 2
+    },
+    {   q: 'How do you write "Hello World" in an alert box?',
+        answers: [ 'msgBox("Hello World")', 'msg("Hello World")', 'alertBox("Hello World")', 'alert("Hello World")'],
+        correctAnswer: 4
+    },
+    {   q: "How do you call a function named myFunction?",
+        answers: [ "call function myFunction", "myFunction()", "call function myFunction()", "call myFunction()"],
+        correctAnswer: 2
     }
 ];
 
@@ -202,6 +232,7 @@ var compareTally = function(a, b)
 
 var tallyFormHandler = function(event)
 {
+    debugger;
     event.preventDefault();
 
     // get the user input
@@ -240,6 +271,8 @@ var startOver = function()
     timeLeft = initTimeLeft;
     renderTimeLeft();
 
+    loadHighScores(); // get the previous high scores loaded into the array, but no need to actually render them yet
+
     document.querySelector("#initial-greeting-msg").textContent = "Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your score/time by " + wrongAnswerPenalty + " seconds!";
     showSections(headerIndex, initialGreetingIndex);
 }
@@ -257,10 +290,9 @@ function countdown()
         }
         else
         {
-            // tht eimer ran out - stop the quiz
+            // the timer ran out - stop the quiz
             clearInterval(timeInterval);
             renderHighScores(true);
-            //window.alert("You've run out of time!");
         }
     }, 1000);
 }
