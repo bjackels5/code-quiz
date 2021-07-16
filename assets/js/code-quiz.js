@@ -1,6 +1,7 @@
-// code-quiz.js - module 4 project
+// code-quiz.js - module 4 project - Brenda Jackels
 
 // section element indexes
+// use these along with the sectionEls array to show/hide the different sections
 const headerIndex = 0;
 const initialGreetingIndex = 1;
 const quizQuestionsIndex = 2;
@@ -17,14 +18,8 @@ var sectionEls =    [   document.querySelector("header"), /* no # because it's n
                     ]  
 
 var highScores = []; // name, timeLeft, correctQuestions, aQuestions
-//adding some data just to test things...
-/*
-var highScores = [  {name: "ILM", timeLeft: "20", correctQuestions: "25", totalQuestions: "30"},
-                    {name: "SJM", timeLeft: "21", correctQuestions: "26", totalQuestions: "30"},
-                    {name: "BJJ", timeLeft: "22", correctQuestions: "27", totalQuestions: "30"}];
-*/
 
-const initTimeLeft = 30;
+const initTimeLeft = 60;
 const wrongAnswerPenalty = 10;
 
 var currentQuestion = 0;
@@ -59,11 +54,7 @@ var qAndAs = [
     }
 ];
 
-var hdrHighScoresEl = document.querySelector("#high-scores-link");
-var startQuizBtnEl = document.querySelector("#start-quiz");
-var quizQuestionEl = document.querySelector("#quiz-question");
 var answerStatusH3El = document.querySelector("#answer-status h3");
-var tallyFormEl = document.querySelector("#tally-form");
 
 var renderTimeLeft = function()
 {
@@ -144,7 +135,8 @@ var showNextQuestion = function()
     if (currentQuestion < qAndAs.length)
     {
         var currQandA = qAndAs[currentQuestion];
-        quizQuestionEl.textContent = currQandA.q;
+        document.querySelector("#quiz-question").textContent = currQandA.q;
+        // quizQuestionEl.textContent = currQandA.q;
         // set the buttons
         for (var j = 0; j < currQandA.answers.length; j++)
         {
@@ -286,18 +278,18 @@ function countdown()
     }, 1000);
 }
   
-
-
 // Event Listeners
-hdrHighScoresEl.addEventListener("click", showHighScores);
-startQuizBtnEl.addEventListener("click", startQuiz);
-tallyFormEl.addEventListener("submit", tallyFormHandler);
+document.querySelector("#high-scores-link").addEventListener("click", showHighScores);
+document.querySelector("#start-quiz").addEventListener("click", startQuiz);
+document.querySelector("#tally-form").addEventListener("submit", tallyFormHandler);
 
 document.querySelector("#answer1").addEventListener("click", answered);
 document.querySelector("#answer2").addEventListener("click", answered);
 document.querySelector("#answer3").addEventListener("click", answered);
 document.querySelector("#answer4").addEventListener("click", answered);
+
 document.querySelector("#main-page-btn").addEventListener("click", startOver);
 document.querySelector("#clear-high-scores-btn").addEventListener("click", clearHighScores);
 
-startOver();
+startOver();    // since I'm setting the initial timer programatically in this file,
+                // I need to set the initial-greeting-msg for the first time
